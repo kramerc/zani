@@ -18,6 +18,7 @@ public class Listener extends ListenerAdapter {
         put("horse@pony.equus.sh", new BotUser("horse@pony.equus.sh", (byte) 1, true));
         put("no@50.47.219.16", new BotUser("no@50.47.219.16", (byte) 1, true));
         put("kr@m3r.sh", new BotUser("kr@m3r.sh", (byte) 1, true));
+        put("sigmakitty@hammond.expi.pl", new BotUser("sigmakitty@hammond.expi.pl", (byte) 1, true));
     }};
 
     @Override
@@ -64,7 +65,7 @@ public class Listener extends ListenerAdapter {
                         event.getChannel().send().message("Added " + args[1] + " to the op list");
                         System.out.println("Added " + args[1] + " to the op list");
                     } else {
-                        System.out.println("BotUser " + args[1] + " already exists in the list.");
+                        System.out.println(args[1] + " already exists in the op list.");
                     }
                 } else {
                     event.getChannel().send().message("Usage: !addop <nick>");
