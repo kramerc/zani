@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f046e14d-6575-42fd-976d-410c6fe0e64d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +102,7 @@
       <workItem from="1699327633966" duration="600000" />
       <workItem from="1699328266744" duration="15000" />
       <workItem from="1699328319401" duration="351000" />
-      <workItem from="1699328706034" duration="12796000" />
+      <workItem from="1699328706034" duration="18591000" />
     </task>
     <servers />
   </component>
