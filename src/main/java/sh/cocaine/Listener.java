@@ -109,7 +109,6 @@ public class Listener extends ListenerAdapter {
                 .setLogin("sexo")
                 .addServer("irc.mzima.net") //Join efnet
                 .addAutoJoinChannel("#camp", "truetocaesar") //Join camp
-//                .addAutoJoinChannel("#drenched") //Join drenched
                 .addListener(new Listener()) //Add our listener that will be called on Events
                 .buildConfiguration();
 
