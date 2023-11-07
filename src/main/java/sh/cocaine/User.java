@@ -5,7 +5,7 @@ public class User {
     String hostmask;
     byte level;
 
-    boolean autoOp = true;
+    boolean autoOp;
 
     public User(String hostmask, byte level, boolean autoOp) {
         this.hostmask = hostmask;

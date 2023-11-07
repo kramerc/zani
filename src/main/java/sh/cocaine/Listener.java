@@ -12,7 +12,10 @@ import java.util.HashMap;
 public class Listener extends ListenerAdapter {
 
     HashMap userList = new HashMap<String, User>() {{
-        put("~whale@snow.cocaine.sh", new User("whale@snow.cocaine.sh", (byte) 3, true));
+        put("whale@snow.cocaine.sh", new User("whale@snow.cocaine.sh", (byte) 3, true));
+        put("horse@pony.equus.sh", new User("horse@pony.equus.sh", (byte) 1, true));
+        put("no@50.47.219.16", new User("no@50.47.219.16", (byte) 1, true));
+        put("kr@m3r.sh", new User("kr@m3r.sh", (byte) 1, true));
     }};
 
     @Override
@@ -26,9 +29,12 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) {
+
+        String eventHostmask = event.getUserHostmask().getHostmask();
+
         if (event.getMessage().startsWith("!")) {
             String[] args = event.getMessage().split(" ");
-            if (args[0].equals("!op") && isLevelOp(event.getUserHostmask().getHostmask())) {
+            if (args[0].equals("!op") && isLevelOp(eventHostmask)) {
                 if (args.length == 1) {
                     event.getChannel().send().setMode("+o " + event.getUser().getNick());
                     System.out.println("Gave " + event.getUser().getNick() + " op");
@@ -40,20 +46,19 @@ public class Listener extends ListenerAdapter {
                     event.getChannel().send().message("Usage: !op <nick>");
                 }
             }
-            if (args[0].equals("!addop") && isLevelAdmin(event.getUserHostmask().getHostmask())) {
+            if (args[0].equals("!addop") && isLevelAdmin(eventHostmask)) {
                 if (args.length == 2) {
                     // create a hashmap of the users in channel and their hostmasks
                     HashMap<String, String> channelUsers = new HashMap<String, String>();
                     for (Object user : event.getChannel().getUsers()) {
                         channelUsers.put(((org.pircbotx.User) user).getNick().toLowerCase(), ((org.pircbotx.User) user).getHostmask());
                     }
-                    System.out.println(channelUsers.get(args[1].toLowerCase()).split("!")[1]);
 
                     // if userList doesn't contain the hostmask, add it
-                    if (!userList.containsKey(channelUsers.get(args[1].toLowerCase()).split("!")[1])) {
+                    if (!userList.containsKey(filteredHostmask(channelUsers.get(args[1].toLowerCase())))) {
+                        userList.put(filteredHostmask(channelUsers.get(args[1].toLowerCase())),
+                                new User(filteredHostmask(channelUsers.get(args[1].toLowerCase())), (byte) 1, true));
 
-                        userList.put(channelUsers.get(args[1].toLowerCase()).split("!")[1], new User(channelUsers.get(args[1].toLowerCase()).split("!")[1], (byte) 1, true));
-                        System.out.println(channelUsers.get(args[1]).split("!")[1].toLowerCase());
                         event.getChannel().send().message("Added " + args[1] + " to the op list");
                         System.out.println("Added " + args[1] + " to the op list");
                     } else {
@@ -71,24 +76,28 @@ public class Listener extends ListenerAdapter {
         }
     }
 
+    public String filteredHostmask(String hostmask) {
+        return hostmask.replaceAll("~", "").split("!")[1].toLowerCase();
+    }
+
     public boolean isAutoOp(String hostmask) {
-        if (userList.containsKey(hostmask.split("!")[1].toLowerCase())) {
-            return ((User) userList.get(hostmask.split("!")[1].toLowerCase())).autoOp;
+        if (userList.containsKey(filteredHostmask(hostmask))) {
+            return ((User) userList.get(filteredHostmask(hostmask))).autoOp;
         } else {
             return false;
         }
     }
 
     public boolean isLevelOp(String hostmask) {
-        if (userList.containsKey(hostmask.split("!")[1].toLowerCase())) {
-            return ((User) userList.get(hostmask.split("!")[1].toLowerCase())).level >= 1;
+        if (userList.containsKey(filteredHostmask(hostmask))) {
+            return ((User) userList.get(filteredHostmask(hostmask))).level >= 1;
         } else {
             return false;
         }
     }
     public boolean isLevelAdmin(String hostmask) {
-        if (userList.containsKey(hostmask.split("!")[1].toLowerCase())) {
-            return ((User) userList.get(hostmask.split("!")[1].toLowerCase())).level >= 2;
+        if (userList.containsKey(filteredHostmask(hostmask))) {
+            return ((User) userList.get(filteredHostmask(hostmask))).level >= 2;
         } else {
             return false;
         }
@@ -101,8 +110,8 @@ public class Listener extends ListenerAdapter {
                 .setRealName("sexo")
                 .setLogin("sexo")
                 .addServer("irc.mzima.net") //Join efnet
-                .addAutoJoinChannel("#camp", "truetocaesar") //Join camp
-//                .addAutoJoinChannel("#drenched") //Join drenched
+//                .addAutoJoinChannel("#camp", "truetocaesar") //Join camp
+                .addAutoJoinChannel("#drenched") //Join drenched
                 .addListener(new Listener()) //Add our listener that will be called on Events
                 .buildConfiguration();
 
