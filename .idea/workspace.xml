@@ -11,8 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f046e14d-6575-42fd-976d-410c6fe0e64d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/BotUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/BotUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/Listener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +29,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="langchain" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -54,7 +60,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "langchain",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/whale/git/sexo",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -69,13 +75,13 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Maven.sexo [assembly:assembly]">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="sh.cocaine.App" />
       <module name="sexo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sh.cocaine.*" />
+          <option name="PATTERN" value="sh.cocaine.sexo.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -84,11 +90,11 @@
       </method>
     </configuration>
     <configuration name="Listener" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="sh.cocaine.Listener" />
+      <option name="MAIN_CLASS_NAME" value="sh.cocaine.sexo.Listener" />
       <module name="sexo" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sh.cocaine.*" />
+          <option name="PATTERN" value="sh.cocaine.sexo.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -113,8 +119,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="sexo [assembly:assembly]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="assembly:assembly" />
+              </list>
+            </option>
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Maven.sexo [assembly:assembly]" />
         <item itemvalue="Application.App" />
         <item itemvalue="JAR Application.sexo-1.0-SNAPSHOT.jar" />
         <item itemvalue="Application.Listener" />
@@ -135,7 +171,7 @@
       <workItem from="1699327633966" duration="600000" />
       <workItem from="1699328266744" duration="15000" />
       <workItem from="1699328319401" duration="351000" />
-      <workItem from="1699328706034" duration="34672000" />
+      <workItem from="1699328706034" duration="34978000" />
     </task>
     <servers />
   </component>

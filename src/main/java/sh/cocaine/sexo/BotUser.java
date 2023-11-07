@@ -1,4 +1,4 @@
-package sh.cocaine;
+package sh.cocaine.sexo;
 
 public class BotUser {
 

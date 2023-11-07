@@ -1,4 +1,4 @@
-package sh.cocaine;
+package sh.cocaine.sexo;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
