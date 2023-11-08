@@ -11,9 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f046e14d-6575-42fd-976d-410c6fe0e64d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/BotUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/BotUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/Listener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/Listener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/BotUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/BotUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/Listener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sh/cocaine/sexo/Listener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,19 +105,6 @@
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/sexo-1.0-SNAPSHOT.jar" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="sexo" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="sexo" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="sexo [assembly:assembly]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -172,6 +158,7 @@
       <workItem from="1699328266744" duration="15000" />
       <workItem from="1699328319401" duration="351000" />
       <workItem from="1699328706034" duration="34978000" />
+      <workItem from="1699413254383" duration="1793000" />
     </task>
     <servers />
   </component>
@@ -183,7 +170,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

@@ -14,11 +14,12 @@ import java.util.Objects;
 public class Listener extends ListenerAdapter {
 
     HashMap<String, BotUser> userList = new HashMap<>() {{
-        put("whale@snow.cocaine.sh", new BotUser("whale@snow.cocaine.sh", (byte) 3, true));
-        put("horse@pony.equus.sh", new BotUser("horse@pony.equus.sh", (byte) 1, true));
-        put("no@50.47.219.16", new BotUser("no@50.47.219.16", (byte) 1, true));
-        put("kr@m3r.sh", new BotUser("kr@m3r.sh", (byte) 1, true));
-        put("sigmakitty@hammond.expi.pl", new BotUser("sigmakitty@hammond.expi.pl", (byte) 1, true));
+        put("whale@snow.cocaine.sh", new BotUser("whale@snow.cocaine.sh", (byte) 3, true, false));
+        put("horse@pony.equus.sh", new BotUser("horse@pony.equus.sh", (byte) 1, true, false));
+        put("no@50.47.219.16", new BotUser("no@50.47.219.16", (byte) 1, true, false));
+        put("kr@m3r.sh", new BotUser("kr@m3r.sh", (byte) 1, true, false));
+        put("sigmakitty@hammond.expi.pl", new BotUser("sigmakitty@hammond.expi.pl", (byte) 1, true, false));
+        put("dolphin@static.191.75.78.5.clients.your-server.de", new BotUser("dolphin@static.191.75.78.5.clients.your-server.de", (byte) 0, false, true));
     }};
 
     @Override
@@ -29,6 +30,11 @@ public class Listener extends ListenerAdapter {
             event.getChannel().send().setMode("+o " + Objects.requireNonNull(event.getUser()).getNick());
             System.out.println("Gave " + event.getUser().getNick() + " auto op");
         }
+
+        if (isAutoVoice(eventHostmask)) {
+            event.getChannel().send().setMode("+v " + Objects.requireNonNull(event.getUser()).getNick());
+            System.out.println("Gave " + event.getUser().getNick() + " auto voice");
+        }
     }
 
     @Override
@@ -37,6 +43,7 @@ public class Listener extends ListenerAdapter {
 
         if (event.getMessage().startsWith("!")) {
             String[] args = event.getMessage().split(" ");
+
             if (args[0].equals("!op") && isLevelOp(eventHostmask)) {
                 if (args.length == 1) {
                     event.getChannel().send().setMode("+o " + Objects.requireNonNull(event.getUser()).getNick());
@@ -49,6 +56,7 @@ public class Listener extends ListenerAdapter {
                     event.getChannel().send().message("Usage: !op <nick>");
                 }
             }
+
             if (args[0].equals("!addop") && isLevelAdmin(eventHostmask)) {
                 if (args.length == 2) {
                     // create a hashmap of the users in channel and their hostmasks
@@ -60,7 +68,7 @@ public class Listener extends ListenerAdapter {
                     // if userList doesn't contain the hostmask, add it
                     if (!userList.containsKey(filteredHostmask(channelUsers.get(args[1].toLowerCase())))) {
                         userList.put(filteredHostmask(channelUsers.get(args[1].toLowerCase())),
-                                new BotUser(filteredHostmask(channelUsers.get(args[1].toLowerCase())), (byte) 1, true));
+                                new BotUser(filteredHostmask(channelUsers.get(args[1].toLowerCase())), (byte) 1, true, false));
 
                         event.getChannel().send().message("Added " + args[1] + " to the op list");
                         System.out.println("Added " + args[1] + " to the op list");
@@ -85,6 +93,13 @@ public class Listener extends ListenerAdapter {
             return false;
         }
     }
+    public boolean isAutoVoice(String hostmask) {
+        if (userList.containsKey(filteredHostmask(hostmask))) {
+            return (userList.get(filteredHostmask(hostmask))).autoVoice;
+        } else {
+            return false;
+        }
+    }
 
     public boolean isLevelOp(String hostmask) {
         if (userList.containsKey(filteredHostmask(hostmask))) {
@@ -95,7 +110,7 @@ public class Listener extends ListenerAdapter {
     }
     public boolean isLevelAdmin(String hostmask) {
         if (userList.containsKey(filteredHostmask(hostmask))) {
-            return (userList.get(filteredHostmask(hostmask))).level >= 2;
+            return (userList.get(filteredHostmask(hostmask))).level >= 3;
         } else {
             return false;
         }
