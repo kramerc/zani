@@ -1,7 +1,5 @@
 package sh.cocaine.sexo;
 
-import org.pircbotx.Configuration;
-import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
@@ -116,20 +114,4 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        //Configure what we want our bot to do
-        Configuration configuration = new Configuration.Builder()
-                .setName("sexo") //Set the nick of the bot.
-                .setRealName("sexo")
-                .setLogin("sexo")
-                .addServer("irc.mzima.net") //Join efnet
-                .addAutoJoinChannel("#camp", "truetocaesar") //Join camp
-                .addListener(new Listener()) //Add our listener that will be called on Events
-                .buildConfiguration();
-
-        //Create our bot with the configuration
-        PircBotX bot = new PircBotX(configuration);
-        //Connect to the server
-        bot.startBot();
-    }
 }
