@@ -1,24 +1,19 @@
 package sh.cocaine.sexo;
 
-import org.pircbotx.User;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.MessageEvent;
+import sh.cocaine.sexo.user.User;
+import sh.cocaine.sexo.user.UserLevel;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 
 public class Listener extends ListenerAdapter {
 
-    HashMap<String, BotUser> userList = new HashMap<>() {{
-        put("whale@snow.cocaine.sh", new BotUser("whale@snow.cocaine.sh", (byte) 3, true, false));
-        put("horse@pony.equus.sh", new BotUser("horse@pony.equus.sh", (byte) 1, true, false));
-        put("no@50.47.219.16", new BotUser("no@50.47.219.16", (byte) 1, true, false));
-        put("kr@m3r.sh", new BotUser("kr@m3r.sh", (byte) 1, true, false));
-        put("sigmakitty@hammond.expi.pl", new BotUser("sigmakitty@hammond.expi.pl", (byte) 1, true, false));
-        put("dolphin@static.191.75.78.5.clients.your-server.de", new BotUser("dolphin@static.191.75.78.5.clients.your-server.de", (byte) 0, false, true));
-    }};
+    private static final Logger logger = Logger.getLogger(Listener.class.getName());
 
     @Override
     public void onJoin(JoinEvent event) {
@@ -37,7 +32,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) {
-        String eventHostmask = event.getUserHostmask().getHostmask();
+        String eventHostmask = filteredHostmask(event.getUserHostmask().getHostmask());
 
         if (event.getMessage().startsWith("!")) {
             String[] args = event.getMessage().split(" ");
@@ -45,11 +40,11 @@ public class Listener extends ListenerAdapter {
             if (args[0].equals("!op") && isLevelOp(eventHostmask)) {
                 if (args.length == 1) {
                     event.getChannel().send().setMode("+o " + Objects.requireNonNull(event.getUser()).getNick());
-                    System.out.println("Gave " + event.getUser().getNick() + " op");
+                    logger.info("Gave " + event.getUser().getNick() + " op");
                 }
                 if (args.length == 2) {
                     event.getChannel().send().setMode("+o " + args[1]);
-                    System.out.println("Gave " + args[1] + " op on behalf of " + Objects.requireNonNull(event.getUser()).getNick());
+                    logger.info("Gave " + args[1] + " op on behalf of " + Objects.requireNonNull(event.getUser()).getNick());
                 } else {
                     event.getChannel().send().message("Usage: !op <nick>");
                 }
@@ -57,21 +52,39 @@ public class Listener extends ListenerAdapter {
 
             if (args[0].equals("!addop") && isLevelAdmin(eventHostmask)) {
                 if (args.length == 2) {
-                    // create a hashmap of the users in channel and their hostmasks
-                    HashMap<String, String> channelUsers = new HashMap<String, String>();
-                    for (User user : event.getChannel().getUsers()) {
-                        channelUsers.put(user.getNick().toLowerCase(), user.getHostmask());
+                    // Find the hostmask of the target user
+                    String hostmask = "";
+                    for (org.pircbotx.User user : event.getChannel().getUsers()) {
+                        if (user.getNick().equalsIgnoreCase(args[1])) {
+                            // Found target user
+                            hostmask = user.getHostmask();
+                            break;
+                        }
                     }
 
-                    // if userList doesn't contain the hostmask, add it
-                    if (!userList.containsKey(filteredHostmask(channelUsers.get(args[1].toLowerCase())))) {
-                        userList.put(filteredHostmask(channelUsers.get(args[1].toLowerCase())),
-                                new BotUser(filteredHostmask(channelUsers.get(args[1].toLowerCase())), (byte) 1, true, false));
+                    // TODO: Figure out how to get the hostmask of a user if it is missing
+                    if (!hostmask.contains("!")) {
+                        event.getChannel().send().message("The bot is missing the hostmask for user " + args[1]);
+                        return;
+                    }
 
-                        event.getChannel().send().message("Added " + args[1] + " to the op list");
-                        System.out.println("Added " + args[1] + " to the op list");
+                    hostmask = filteredHostmask(hostmask);
+
+                    User user = User.findByHostmask(hostmask);
+                    if (user != null) {
+                        user.setLevel(UserLevel.OP.getLevel());
+                        user.setAutoOp(true);
                     } else {
-                        System.out.println(args[1] + " already exists in the op list.");
+                        user = new User(hostmask, UserLevel.OP.getLevel(), true, false);
+                    }
+
+                    if (user.save()) {
+                        event.getChannel().send().message("Added " + args[1] + " to the op list");
+                        logger.info("Added " + args[1] + " to the op list");
+                        event.getChannel().send().setMode("+o " + args[1]);
+                    } else {
+                        event.getChannel().send().message("Failed to add " + args[1] + " to the op list");
+                        logger.warning("Failed to add " + args[1] + " to the op list");
                     }
                 } else {
                     event.getChannel().send().message("Usage: !addop <nick>");
@@ -80,35 +93,44 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    public String filteredHostmask(String hostmask) {
+    private String filteredHostmask(String hostmask) {
+        if (!hostmask.contains("!")) {
+            return hostmask;
+        }
+
         return hostmask.replaceAll("~", "").split("!")[1].toLowerCase();
     }
 
-    public boolean isAutoOp(String hostmask) {
-        if (userList.containsKey(filteredHostmask(hostmask))) {
-            return (userList.get(filteredHostmask(hostmask))).autoOp;
+    private boolean isAutoOp(String filteredHostmask) {
+        User user = User.findByHostmask(filteredHostmask);
+        if (user != null) {
+            return user.isAutoOp();
         } else {
             return false;
         }
     }
-    public boolean isAutoVoice(String hostmask) {
-        if (userList.containsKey(filteredHostmask(hostmask))) {
-            return (userList.get(filteredHostmask(hostmask))).autoVoice;
+    private boolean isAutoVoice(String filteredHostmask) {
+        User user = User.findByHostmask(filteredHostmask);
+        if (user != null) {
+            return user.isAutoVoice();
         } else {
             return false;
         }
     }
 
-    public boolean isLevelOp(String hostmask) {
-        if (userList.containsKey(filteredHostmask(hostmask))) {
-            return (userList.get(filteredHostmask(hostmask))).level >= 1;
+    private boolean isLevelOp(String filteredHostmask) {
+        User user = User.findByHostmask(filteredHostmask);
+        if (user != null) {
+            return user.getLevel() >= UserLevel.OP.getLevel();
         } else {
             return false;
         }
     }
-    public boolean isLevelAdmin(String hostmask) {
-        if (userList.containsKey(filteredHostmask(hostmask))) {
-            return (userList.get(filteredHostmask(hostmask))).level >= 3;
+
+    private boolean isLevelAdmin(String filteredHostmask) {
+        User user = User.findByHostmask(filteredHostmask);
+        if (user != null) {
+            return user.getLevel() >= UserLevel.ADMIN.getLevel();
         } else {
             return false;
         }
