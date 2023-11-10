@@ -15,7 +15,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>sh.cocaine.sexo.Listener</mainClass>
+                            <mainClass>sh.cocaine.sexo.Sexo</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
