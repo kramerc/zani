@@ -90,6 +90,46 @@ public class Listener extends ListenerAdapter {
                     event.getChannel().send().message("Usage: !addop <nick>");
                 }
             }
+
+            if (args[0].equals("!addvoice") && (isLevelOp(eventHostmask) || isLevelAdmin(eventHostmask))) {
+                if (args.length == 2) {
+                    // Find the hostmask of the target user
+                    String hostmask = "";
+                    for (org.pircbotx.User user : event.getChannel().getUsers()) {
+                        if (user.getNick().equalsIgnoreCase(args[1])) {
+                            // Found target user
+                            hostmask = user.getHostmask();
+                            break;
+                        }
+                    }
+
+                    // TODO: Figure out how to get the hostmask of a user if it is missing
+                    if (!hostmask.contains("!")) {
+                        event.getChannel().send().message("The bot is missing the hostmask for user " + args[1]);
+                        return;
+                    }
+
+                    hostmask = filteredHostmask(hostmask);
+
+                    User user = User.findByHostmask(hostmask);
+                    if (user != null) {
+                        user.setAutoVoice(true);
+                    } else {
+                        user = new User(hostmask, UserLevel.USER.getLevel(), false, true);
+                    }
+
+                    if (user.save()) {
+                        event.getChannel().send().message("Added " + args[1] + " to the voice list");
+                        logger.info("Added " + args[1] + " to the voice list");
+                        event.getChannel().send().setMode("+v " + args[1]);
+                    } else {
+                        event.getChannel().send().message("Failed to add " + args[1] + " to the voice list");
+                        logger.warning("Failed to add " + args[1] + " to the voice list");
+                    }
+                } else {
+                    event.getChannel().send().message("Usage: !addvoice <nick>");
+                }
+            }
         }
     }
 
