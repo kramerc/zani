@@ -17,7 +17,7 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onJoin(JoinEvent event) {
-        String eventHostmask = event.getUserHostmask().getHostmask();
+        String eventHostmask = filteredHostmask(event.getUserHostmask().getHostmask());
 
         if (isAutoOp(eventHostmask)) {
             event.getChannel().send().setMode("+o " + Objects.requireNonNull(event.getUser()).getNick());
