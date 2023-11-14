@@ -1,0 +1,22 @@
+# Ignore Maven build directory
+target/
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+
+# Ignore Maven-related files
+mvnw
+mvnw.cmd
+.mvn/
+
+# Ignore Docker-related files
+Dockerfile
+.dockerignore
+
+# Ignore any editor backup files
+*~
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
