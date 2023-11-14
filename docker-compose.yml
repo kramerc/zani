@@ -1,0 +1,12 @@
+version: '2.4'
+services:
+  ircd:
+    #image: linuxserver/ngircd
+    image: inspircd/inspircd-docker
+    ports:
+      - "6667:6667"
+
+  sexo:
+    build: .
+    volumes:
+      - ./config/sexo.yml:/app/sexo.yml
