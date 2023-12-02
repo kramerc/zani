@@ -20,11 +20,15 @@ public class Listener extends ListenerAdapter {
         String eventHostmask = filteredHostmask(event.getUserHostmask().getHostmask());
 
         if (isAutoOp(eventHostmask)) {
+            if (event.getChannel().isOp(event.getUser()))
+                return;
             event.getChannel().send().setMode("+o " + Objects.requireNonNull(event.getUser()).getNick());
             System.out.println("Gave " + event.getUser().getNick() + " auto op");
         }
 
         if (isAutoVoice(eventHostmask)) {
+            if (event.getChannel().hasVoice(event.getUser()))
+                return;
             event.getChannel().send().setMode("+v " + Objects.requireNonNull(event.getUser()).getNick());
             System.out.println("Gave " + event.getUser().getNick() + " auto voice");
         }
