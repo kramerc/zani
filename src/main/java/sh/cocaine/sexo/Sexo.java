@@ -27,6 +27,7 @@ public class Sexo {
 
         //Configure what we want our bot to do
         Configuration.Builder configBuilder = new Configuration.Builder()
+                .setAutoReconnect(true)
                 .setOnJoinWhoEnabled(true)
                 .setName(yamlConfig.getNick())
                 .setRealName(yamlConfig.getRealName())
