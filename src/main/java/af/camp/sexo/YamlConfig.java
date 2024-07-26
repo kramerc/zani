@@ -1,4 +1,4 @@
-package sh.cocaine.sexo;
+package af.camp.sexo;
 
 import org.yaml.snakeyaml.Yaml;
 

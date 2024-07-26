@@ -1,8 +1,8 @@
-package sh.cocaine.sexo;
+package af.camp.sexo;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;
-import sh.cocaine.sexo.db.DatabaseEngine;
+import af.camp.sexo.db.DatabaseEngine;
 
 import java.util.logging.Logger;
 

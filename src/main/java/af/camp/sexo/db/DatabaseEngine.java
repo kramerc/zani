@@ -1,8 +1,8 @@
-package sh.cocaine.sexo.db;
+package af.camp.sexo.db;
 
-import sh.cocaine.sexo.Sexo;
-import sh.cocaine.sexo.user.User;
-import sh.cocaine.sexo.user.UserLevel;
+import af.camp.sexo.Sexo;
+import af.camp.sexo.user.User;
+import af.camp.sexo.user.UserLevel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class DatabaseEngine {
 
     public synchronized void seed() {
         List<User> users = new ArrayList<>();
-        users.add(new User("whale@snow.cocaine.sh", UserLevel.ADMIN.getLevel(), true, false));
+        users.add(new User("whale@snowcone.camp.af", UserLevel.OP.getLevel(), true, false));
         users.add(new User("horse@pony.equus.sh", UserLevel.OP.getLevel(), true, false));
         users.add(new User("no@50.47.219.16", UserLevel.OP.getLevel(), true, false));
         users.add(new User("kr@m3r.sh", UserLevel.OP.getLevel(), true, false));

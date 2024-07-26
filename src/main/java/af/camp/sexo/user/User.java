@@ -1,6 +1,6 @@
-package sh.cocaine.sexo.user;
+package af.camp.sexo.user;
 
-import sh.cocaine.sexo.db.DatabaseEngine;
+import af.camp.sexo.db.DatabaseEngine;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

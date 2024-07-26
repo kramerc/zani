@@ -1,12 +1,11 @@
-package sh.cocaine.sexo;
+package af.camp.sexo;
 
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.MessageEvent;
-import sh.cocaine.sexo.user.User;
-import sh.cocaine.sexo.user.UserLevel;
+import af.camp.sexo.user.User;
+import af.camp.sexo.user.UserLevel;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -54,7 +53,7 @@ public class Listener extends ListenerAdapter {
                 }
             }
 
-            if (args[0].equals("!addop") && isLevelAdmin(eventHostmask)) {
+            if (args[0].equals("!addop") && isLevelOp(eventHostmask)) {
                 if (args.length == 2) {
                     // Find the hostmask of the target user
                     String hostmask = "";
@@ -95,7 +94,7 @@ public class Listener extends ListenerAdapter {
                 }
             }
 
-            if (args[0].equals("!addvoice") && (isLevelOp(eventHostmask) || isLevelAdmin(eventHostmask))) {
+            if (args[0].equals("!addvoice") && (isLevelOp(eventHostmask) || isLevelOp(eventHostmask))) {
                 if (args.length == 2) {
                     // Find the hostmask of the target user
                     String hostmask = "";
@@ -170,14 +169,4 @@ public class Listener extends ListenerAdapter {
             return false;
         }
     }
-
-    private boolean isLevelAdmin(String filteredHostmask) {
-        User user = User.findByHostmask(filteredHostmask);
-        if (user != null) {
-            return user.getLevel() >= UserLevel.ADMIN.getLevel();
-        } else {
-            return false;
-        }
-    }
-
 }

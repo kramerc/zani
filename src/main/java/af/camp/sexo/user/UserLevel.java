@@ -1,4 +1,4 @@
-package sh.cocaine.sexo.user;
+package af.camp.sexo.user;
 
 public enum UserLevel {
     USER(0),
