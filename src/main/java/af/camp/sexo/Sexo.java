@@ -32,6 +32,7 @@ public class Sexo {
                 .setName(yamlConfig.getNick())
                 .setRealName(yamlConfig.getRealName())
                 .setLogin(yamlConfig.getLogin())
+                .setOnJoinWhoEnabled(true)
                 .addServer(yamlConfig.getServer(), yamlConfig.getPort())
                 .addListener(new Listener()); //Add our listener that will be called on Events
 

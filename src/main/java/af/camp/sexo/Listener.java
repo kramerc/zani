@@ -65,7 +65,6 @@ public class Listener extends ListenerAdapter {
                         }
                     }
 
-                    // TODO: Figure out how to get the hostmask of a user if it is missing
                     if (!hostmask.contains("!")) {
                         event.getChannel().send().message("The bot is missing the hostmask for user " + args[1]);
                         return;
@@ -106,7 +105,6 @@ public class Listener extends ListenerAdapter {
                         }
                     }
 
-                    // TODO: Figure out how to get the hostmask of a user if it is missing
                     if (!hostmask.contains("!")) {
                         event.getChannel().send().message("The bot is missing the hostmask for user " + args[1]);
                         return;
@@ -131,6 +129,29 @@ public class Listener extends ListenerAdapter {
                     }
                 } else {
                     event.getChannel().send().message("Usage: !addvoice <nick>");
+                }
+            }
+
+            if (args[0].equals("!who")) {
+                if (args.length == 2) {
+                    String hostmask = event.getBot().getUserChannelDao().getUser(args[1]).getHostmask();
+
+                    if (!hostmask.contains("!")) {
+                        event.getChannel().send().message("The bot is missing the hostmask for user " + args[1]);
+                        return;
+                    }
+
+                    hostmask = filteredHostmask(hostmask);
+
+                    User user = User.findByHostmask(hostmask);
+                    if (user != null) {
+                        event.getChannel().send().message(args[1] + " is " + user.getLevel() + " and has auto-op: " + user.isAutoOp() + " and has auto-voice: " + user.isAutoVoice());
+                    } else {
+                        event.getChannel().send().message(args[1] + " is not in the database");
+                    }
+                    event.getChannel().send().message("Hostmask: " + hostmask);
+                } else {
+                    event.getChannel().send().message("Usage: !who <nick>");
                 }
             }
         }
