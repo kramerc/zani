@@ -6,4 +6,6 @@ WORKDIR /app
 COPY . .
 RUN cargo install --path .
 
+RUN apk del musl-dev openssl-dev
+
 CMD ["sexo"]
