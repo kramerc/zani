@@ -1,0 +1,17 @@
+[package]
+name = "sexo"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.97"
+futures = "0.3.31"
+irc = "1.0.0"
+rusqlite = { version = "0.34.0", features = ["bundled"] }
+tokio = { version = "1.0", features = [
+    "rt",
+    "rt-multi-thread",
+    "macros",
+    "net",
+    "time",
+] }

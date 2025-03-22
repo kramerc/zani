@@ -20,3 +20,7 @@ Dockerfile
 # Ignore system-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore sexo data files
+/sexo.db
+/sexo.toml

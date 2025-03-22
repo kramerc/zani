@@ -1,8 +1,0 @@
-dbUrl: jdbc:sqlite:sexo.db
-nick: sexo
-login: sexo
-realName: Sexo
-server: sexo-ircd-1
-port: 6667
-channels:
-  - "#sexo-devel"
