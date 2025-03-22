@@ -30,8 +30,6 @@ async fn main() -> Result<(), anyhow::Error> {
     let mut stream = client.stream()?;
 
     while let Some(message) = stream.next().await.transpose()? {
-        print!("{}", message);
-
         if let Command::PRIVMSG(ref target, ref msg) = message.command {
             let hostmask = &message.prefix.unwrap().to_string();
             let user = get_user(&conn, &hostmask).unwrap_or(default_user(&hostmask));
