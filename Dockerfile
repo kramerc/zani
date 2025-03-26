@@ -5,5 +5,6 @@ COPY . .
 RUN cargo install --path . --target=x86_64-unknown-linux-musl
 
 FROM alpine:3.21
+WORKDIR /app
 COPY --from=builder /usr/local/cargo/bin/sexo /usr/local/bin/sexo
 CMD ["sexo"]
