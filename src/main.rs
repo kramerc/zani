@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use futures::prelude::*;
 use irc::client::prelude::*;
 use rusqlite::Connection;
+use tokio::signal;
 
 mod models;
 mod database;
@@ -27,53 +28,81 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let mut stream = client.stream()?;
 
-    while let Some(message) = stream.next().await.transpose()? {
-        match message.command {
-            Command::PRIVMSG(ref target, ref msg) => {
-                if let Some(ref prefix) = message.prefix {
-                    let hostmask = &prefix.to_string();
-                    handle_privmsg(&client, &conn, target, msg, hostmask, &hostmasks_by_user).await?;
+    // Set up signal handler for graceful shutdown
+    let mut sigterm = signal::unix::signal(signal::unix::SignalKind::terminate())?;
+
+    loop {
+        tokio::select! {
+            // Handle IRC messages
+            msg_result = stream.next() => {
+                match msg_result {
+                    Some(Ok(message)) => {
+                        match message.command {
+                            Command::PRIVMSG(ref target, ref msg) => {
+                                if let Some(ref prefix) = message.prefix {
+                                    let hostmask = &prefix.to_string();
+                                    handle_privmsg(&client, &conn, target, msg, hostmask, &hostmasks_by_user).await?;
+                                }
+                            }
+                            Command::JOIN(ref channel, ..) => {
+                                if let Some(ref prefix) = message.prefix {
+                                    let hostmask = &prefix.to_string();
+                                    handle_join(&client, &conn, channel, hostmask, &mut hostmasks_by_user, &mut channel_modes).await?;
+                                }
+                            }
+                            Command::PART(ref channel, ..) => {
+                                if let Some(ref prefix) = message.prefix {
+                                    let hostmask = &prefix.to_string();
+                                    handle_part(hostmask, &mut hostmasks_by_user, &mut channel_modes, channel);
+                                }
+                            }
+                            Command::QUIT(..) => {
+                                if let Some(ref prefix) = message.prefix {
+                                    let hostmask = &prefix.to_string();
+                                    handle_quit(hostmask, &mut hostmasks_by_user, &mut channel_modes);
+                                }
+                            }
+                            Command::Response(Response::RPL_WHOREPLY, ref args) => {
+                                handle_who_reply(args, &mut hostmasks_by_user);
+                            }
+                            Command::Response(Response::RPL_NAMREPLY, ref args) => {
+                                // args[2] is the channel, args[3] is the list of names
+                                if args.len() >= 4 {
+                                    let channel = &args[2];
+                                    let names_str = &args[3];
+                                    let names: Vec<String> = names_str.split_whitespace().map(|s| s.to_string()).collect();
+                                    handle_names_reply(channel, &names, &mut channel_modes);
+                                }
+                            }
+                            Command::Raw(ref cmd, ref args) if cmd == "MODE" => {
+                                // Handle raw MODE messages
+                                if args.len() >= 3 {
+                                    let channel = &args[0];
+                                    let mode_str = &args[1];
+                                    handle_raw_mode_change(channel, mode_str, &args[2..], &mut channel_modes);
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+                    Some(Err(e)) => return Err(e.into()),
+                    None => break, // Stream ended
                 }
             }
-            Command::JOIN(ref channel, ..) => {
-                if let Some(ref prefix) = message.prefix {
-                    let hostmask = &prefix.to_string();
-                    handle_join(&client, &conn, channel, hostmask, &mut hostmasks_by_user, &mut channel_modes).await?;
+            // Handle SIGTERM for graceful shutdown
+            _ = sigterm.recv() => {
+                println!("Received SIGTERM, shutting down gracefully...");
+
+                // Send QUIT message to IRC server
+                if let Err(e) = client.send_quit("Shutting down") {
+                    eprintln!("Error sending QUIT message: {}", e);
                 }
+
+                // Give a moment for the QUIT message to be sent
+                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+
+                break;
             }
-            Command::PART(ref channel, ..) => {
-                if let Some(ref prefix) = message.prefix {
-                    let hostmask = &prefix.to_string();
-                    handle_part(hostmask, &mut hostmasks_by_user, &mut channel_modes, channel);
-                }
-            }
-            Command::QUIT(..) => {
-                if let Some(ref prefix) = message.prefix {
-                    let hostmask = &prefix.to_string();
-                    handle_quit(hostmask, &mut hostmasks_by_user, &mut channel_modes);
-                }
-            }
-            Command::Response(Response::RPL_WHOREPLY, ref args) => {
-                handle_who_reply(args, &mut hostmasks_by_user);
-            }
-            Command::Response(Response::RPL_NAMREPLY, ref args) => {
-                // args[2] is the channel, args[3] is the list of names
-                if args.len() >= 4 {
-                    let channel = &args[2];
-                    let names_str = &args[3];
-                    let names: Vec<String> = names_str.split_whitespace().map(|s| s.to_string()).collect();
-                    handle_names_reply(channel, &names, &mut channel_modes);
-                }
-            }
-            Command::Raw(ref cmd, ref args) if cmd == "MODE" => {
-                // Handle raw MODE messages
-                if args.len() >= 3 {
-                    let channel = &args[0];
-                    let mode_str = &args[1];
-                    handle_raw_mode_change(channel, mode_str, &args[2..], &mut channel_modes);
-                }
-            }
-            _ => {}
         }
     }
 
