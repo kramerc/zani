@@ -1,4 +1,4 @@
-FROM rust:1.85-alpine3.21 AS builder
+FROM rust:1.87-alpine3.21 AS builder
 RUN apk add musl-dev openssl-dev openssl-libs-static
 WORKDIR /usr/src/app
 COPY . .
