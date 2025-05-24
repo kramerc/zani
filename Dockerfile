@@ -1,9 +1,11 @@
 FROM rust:1.87-alpine3.21 AS builder
 RUN apk add musl-dev openssl-dev openssl-libs-static
 WORKDIR /usr/src/app
-COPY . .
 
-# Set target based on architecture
+# Copy dependency files first for better caching
+COPY Cargo.toml Cargo.lock ./
+
+# Set target based on architecture and add target
 ARG TARGETPLATFORM
 RUN case "$TARGETPLATFORM" in \
     "linux/amd64") TARGET="x86_64-unknown-linux-musl" ;; \
@@ -11,6 +13,26 @@ RUN case "$TARGETPLATFORM" in \
     *) echo "Unsupported platform: $TARGETPLATFORM" && exit 1 ;; \
     esac && \
     rustup target add $TARGET && \
+    echo $TARGET > /tmp/target
+
+# Build dependencies first (this layer will be cached if dependencies don't change)
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/usr/src/app/target \
+    TARGET=$(cat /tmp/target) && \
+    mkdir -p src && \
+    echo "fn main() {}" > src/main.rs && \
+    cargo build --release --target=$TARGET && \
+    rm src/main.rs
+
+# Copy source code
+COPY src ./src
+
+# Build the actual application
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    --mount=type=cache,target=/usr/src/app/target \
+    TARGET=$(cat /tmp/target) && \
     cargo install --path . --target=$TARGET
 
 FROM alpine:3.21
