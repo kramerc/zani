@@ -19,7 +19,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let conn = Connection::open("sexo.db")?;
     prepare(&conn)?;
-    seed(&conn)?;
+    // seed(&conn)?;
 
     let config = Config::load("sexo.toml")?;
     let mut client = Client::from_config(config).await?;
