@@ -4,7 +4,7 @@ use irc::client::prelude::*;
 use rusqlite::Connection;
 use crate::models::OP;
 use crate::database::get_user;
-use crate::utils::{parse_nick, filtered_hostmask};
+use crate::utils::{parse_nick, filtered_hostmask, extract_urls, fetch_page_title};
 use crate::commands::*;
 
 // Structure to track user modes per channel
@@ -24,6 +24,16 @@ pub async fn handle_privmsg(
     hostmask: &str,
     hostmasks_by_user: &HashMap<String, String>,
 ) -> Result<(), anyhow::Error> {
+    // First, check for URLs in any message and fetch titles
+    let urls = extract_urls(msg);
+    for url in urls {
+        if let Some(title) = fetch_page_title(&url).await {
+            let response = format!("\x0303\u{2937}\x03 {}", title);
+            client.send_privmsg(target, &response)?;
+        }
+    }
+
+    // Then handle commands (only for OPs)
     let user = get_user(conn, &hostmask)?;
 
     if user.level < OP {
