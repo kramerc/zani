@@ -1,0 +1,11 @@
+---
+# Host-specific variables for localhost
+# These variables override group_vars for this specific host
+
+# Example: localhost specific IRC configuration
+# irc_config:
+#   server: "127.0.0.1"
+#   port: 6667
+
+# Example: localhost specific paths
+# app_dir: "/home/{{ app_user }}/custom-path"

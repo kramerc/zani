@@ -1,0 +1,26 @@
+---
+# Development environment specific configuration
+# Override any variables from all.yml here
+
+# Build strategy: build from source in development
+build_strategy: "build"  # Options: "build" or "pull"
+
+# Development IRC configuration overrides
+irc_config_overrides:
+  nickname: "sexo-dev"
+  channels: ["#dev", "#testing", "#private-dev"]
+  server: "localhost"
+  port: 6667
+  # Example channel keys for development
+  channel_keys:
+    "#private-dev": "dev-secret-key"
+    "#testing": "test123"
+
+# Development container settings
+container_options:
+  restart_policy: "no"  # Don't auto-restart in dev
+  network: host
+
+# Force rebuild in development
+build_options:
+  force_rebuild: true

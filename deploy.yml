@@ -1,0 +1,177 @@
+---
+- name: Deploy sexo IRC bot to Podman container
+  hosts: all
+  become: false
+
+  vars:
+    # Merge base IRC config with environment-specific overrides
+    merged_irc_config: "{{ irc_config | combine(irc_config_overrides | default({}), recursive=True) }}"
+
+  tasks:
+    - name: Ensure sexo user exists
+      become: true
+      user:
+        name: "{{ app_user }}"
+        state: present
+        create_home: true
+        shell: /bin/bash
+        system: false
+
+    - name: Create application directories
+      become: true
+      become_user: "{{ app_user }}"
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+      loop:
+        - "{{ app_dir }}"
+        - "{{ config_dir }}"
+        - "{{ data_dir }}"
+
+    - name: Copy application source code
+      become: true
+      become_user: "{{ app_user }}"
+      synchronize:
+        src: "{{ playbook_dir }}/"
+        dest: "{{ app_dir }}/"
+        delete: true
+        rsync_opts: "{{ build_options.exclude_patterns | map('regex_replace', '^(.*)$', '--exclude=\\1') | list }}"
+      when: build_strategy == "build"
+
+    - name: Generate IRC bot configuration
+      become: true
+      become_user: "{{ app_user }}"
+      template:
+        src: sexo.toml.j2
+        dest: "{{ config_dir }}/sexo.toml"
+        mode: '0644'
+
+    - name: Login to container registry (production)
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_login:
+        registry: "{{ registry_auth.registry }}"
+        username: "{{ registry_auth.username }}"
+        password: "{{ registry_auth.password }}"
+      when:
+        - build_strategy == "pull"
+        - registry_auth is defined
+        - registry_auth.username != ""
+        - registry_auth.password != ""
+      no_log: true  # Don't log credentials
+
+    - name: Build container image (development)
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_image:
+        name: "{{ container_image }}"
+        path: "{{ app_dir }}"
+        force: "{{ build_options.force_rebuild }}"
+        build:
+          format: docker
+      when: build_strategy == "build"
+
+    - name: Pull container image (production)
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_image:
+        name: "{{ container_image }}"
+        pull: true
+        force: "{{ build_options.force_rebuild | default(false) }}"
+      when: build_strategy == "pull"
+
+    - name: Stop existing systemd service if running
+      become: true
+      become_user: "{{ app_user }}"
+      systemd:
+        scope: user
+        name: "{{ systemd_service }}"
+        state: stopped
+      ignore_errors: true
+
+    - name: Remove existing container
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_container:
+        name: "{{ container_name }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Create sexo container
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_container:
+        name: "{{ container_name }}"
+        image: "{{ container_image }}"
+        state: created
+        restart_policy: "{{ container_options.restart_policy }}"
+        volumes:
+          - "{{ config_dir }}:/app/config"
+          - "{{ data_dir }}:/app/data"
+        network: "{{ container_options.network }}"
+        log_driver: "{{ container_options.log_driver }}"
+        log_options:
+          tag: "{{ container_options.log_tag }}"
+
+    - name: Enable lingering for sexo user (allows user services to run without login)
+      become: true
+      command: loginctl enable-linger {{ app_user }}
+      changed_when: false
+
+    - name: Generate systemd service for container
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_generate_systemd:
+        name: "{{ container_name }}"
+        dest: "/home/{{ app_user }}/.config/systemd/user/"
+        restart_policy: always
+        new: true
+
+    - name: Ensure systemd user directory exists
+      become: true
+      become_user: "{{ app_user }}"
+      file:
+        path: "/home/{{ app_user }}/.config/systemd/user"
+        state: directory
+        mode: '0755'
+
+    - name: Reload systemd user daemon
+      become: true
+      become_user: "{{ app_user }}"
+      systemd:
+        scope: user
+        daemon_reload: true
+
+    - name: Enable and start sexo container service
+      become: true
+      become_user: "{{ app_user }}"
+      systemd:
+        scope: user
+        name: "{{ systemd_service }}"
+        enabled: true
+        state: started
+
+    - name: Wait for container to be running
+      become: true
+      become_user: "{{ app_user }}"
+      containers.podman.podman_container_info:
+        name: "{{ container_name }}"
+      register: container_info
+      until: container_info.containers[0].State.Running
+      retries: 10
+      delay: 5
+
+    - name: Display container status
+      debug:
+        msg: |
+          Container {{ container_name }} is running
+          Service: {{ systemd_service }}
+          Status: {{ container_info.containers[0].State.Status }}
+
+          To check logs: journalctl --user -u {{ systemd_service }}
+          To stop: systemctl --user stop {{ systemd_service }}
+          To start: systemctl --user start {{ systemd_service }}
+          To restart: systemctl --user restart {{ systemd_service }}

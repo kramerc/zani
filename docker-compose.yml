@@ -7,6 +7,7 @@ services:
   sexo:
     build: .
     volumes:
-      - ./config/sexo.toml:/app/sexo.toml
+      - ./config:/app/config
+      - ./data:/app/data
     depends_on:
       - ircd

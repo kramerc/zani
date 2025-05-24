@@ -1,0 +1,29 @@
+---
+# Production environment specific configuration
+# Override any variables from all.yml here
+
+# Build strategy: pull pre-built image in production
+build_strategy: "pull"  # Options: "build" or "pull"
+
+# Production IRC configuration overrides
+irc_config_overrides:
+  server: "irc.swepipe.se"
+  port: 6667
+  use_tls: false
+  channels: ["#camp"]
+  channel_keys:
+    "#camp": "truetocaesar"
+
+# Example: Different container settings for production
+# container_options:
+#   restart_policy: unless-stopped
+#   network: bridge
+
+# Use pre-built image from registry
+container_image: "ghcr.io/kramerc/{{ app_name }}:main"
+
+# Registry authentication for pulling images
+registry_auth:
+  registry: "ghcr.io"
+  username: "{{ lookup('env', 'GHCR_USERNAME') }}"
+  password: "{{ lookup('env', 'GHCR_TOKEN') }}"
