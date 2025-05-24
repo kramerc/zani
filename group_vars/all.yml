@@ -1,0 +1,54 @@
+---
+# Application configuration
+app_name: sexo
+app_user: sexo
+app_dir: "/home/{{ app_user }}/{{ app_name }}"
+config_dir: "{{ app_dir }}/config"
+data_dir: "{{ app_dir }}/data"
+
+# Container configuration
+container_name: "{{ app_name }}"
+container_image: "localhost/{{ app_name }}:latest"
+systemd_service: "container-{{ container_name }}"
+
+# IRC Bot configuration
+irc_config:
+  nickname: "{{ app_name }}"
+  alt_nicks: ["{{ app_name }}_", "{{ app_name }}__"]
+  username: "{{ app_name }}"
+  realname: "{{ app_name }}"
+  server: "localhost"
+  port: 6667
+  password: ""
+  use_tls: false
+  encoding: "UTF-8"
+  channels: ["#thelounge"]
+  umodes: "+i"
+  user_info: "{{ app_name }} channel management bot"
+  version: "{{ app_name }}/0.1.0"
+  ping_time: 180
+  ping_timeout: 20
+  burst_window_length: 8
+  max_messages_in_burst: 15
+  should_ghost: false
+  # Channel keys/passwords - can be overridden per environment
+  channel_keys: {}
+
+# Container runtime options
+container_options:
+  restart_policy: always
+  network: host
+  log_driver: journald
+  log_tag: "{{ container_name }}"
+
+# Build options
+build_options:
+  force_rebuild: true
+  exclude_patterns:
+    - "target/"
+    - ".git/"
+    - "*.db"
+    - "deploy.yml"
+    - "inventory.ini"
+    - "group_vars/"
+    - "host_vars/"

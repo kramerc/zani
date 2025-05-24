@@ -1,4 +1,45 @@
+# Rust
+/target/
+Cargo.lock
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+
+# Configuration files with secrets
+sexo.toml
+config/sexo.toml.local
+config/*.local
+
+# Ansible generated files
+*.retry
+.ansible/
+
+# IDE files
 /.idea
-/target
-/sexo.db
-/sexo.toml
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.env
+
+# Local inventory files (may contain sensitive info)
+inventory.local
+inventory.*.local
+
+# Host-specific overrides with secrets
+host_vars/*.local.yml
+group_vars/*.local.yml

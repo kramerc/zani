@@ -2,8 +2,18 @@
 
 A modular IRC bot written in Rust that provides user management and channel moderation features.
 
+## Quick Start
+
+```bash
+# Clone and deploy locally
+git clone <repository>
+cd sexo
+./deploy.sh --dev
+```
+
 ## Project Structure
 
+### Source Code
 The codebase has been refactored into a clean modular structure:
 
 - `src/main.rs` - Main application entry point and event loop
@@ -12,6 +22,13 @@ The codebase has been refactored into a clean modular structure:
 - `src/commands.rs` - Command handlers (!op, !addop, !voice, !addvoice, !who)
 - `src/handlers.rs` - Event handlers (PRIVMSG, JOIN, PART, WHO replies)
 - `src/utils.rs` - Utility functions (hostmask parsing, nick extraction)
+
+### Deployment Infrastructure
+- `deploy.yml` - Main Ansible playbook for container deployment
+- `group_vars/` - Environment-specific configuration variables
+- `host_vars/` - Host-specific configuration overrides
+- `templates/` - Configuration file templates
+- `inventory.ini` - Single Ansible inventory file with development and production groups
 
 ## Features
 
@@ -26,7 +43,10 @@ The codebase has been refactored into a clean modular structure:
 
 ## Configuration
 
-Create a `sexo.toml` file in the working directory:
+The bot can be configured in two ways:
+
+### Manual Configuration
+Create a `config/sexo.toml` file:
 
 ```toml
 nickname = "sexo"
@@ -37,9 +57,32 @@ port = 6667
 channels = ["#yourchannel"]
 ```
 
+### Ansible Deployment (Recommended)
+Use the included Ansible playbooks for automated deployment to Podman containers:
+
+```bash
+# Development deployment
+./deploy.sh --dev
+
+# Production deployment  
+./deploy.sh --prod
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions and [VARIABLES.md](VARIABLES.md) for configuration options.
+
 ## Building and Running
 
+### Local Development
 ```bash
 cargo build --release
 cargo run
+```
+
+### Container Deployment
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or use Ansible for production deployment
+./deploy.sh
 ```
