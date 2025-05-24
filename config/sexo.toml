@@ -1,0 +1,38 @@
+owners = []
+nickname = "sexo"
+nick_password = ""
+alt_nicks = ["sexo_", "sexo__"]
+username = "sexo"
+realname = "sexo"
+server = "ircd"
+port = 6667
+password = ""
+proxy_type = "None"
+proxy_server = "127.0.0.1"
+proxy_port = 1080
+proxy_username = ""
+proxy_password = ""
+use_tls = false
+cert_path = ""
+client_cert_path = ""
+client_cert_pass = ""
+encoding = "UTF-8"
+channels = ["#thelounge"]
+umodes = "+i"
+user_info = "sexo channel management bot"
+version = "sexo/0.1.0"
+source = ""
+ping_time = 180
+ping_timeout = 20
+burst_window_length = 8
+max_messages_in_burst = 15
+should_ghost = false
+ghost_sequence = []
+
+[channel_keys]
+"#fake" = "password"
+
+[options]
+note = "anything you want can be in here!"
+and = "you can use it to build your own additional configuration options."
+key = "value"

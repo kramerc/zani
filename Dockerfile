@@ -1,18 +1,19 @@
-# Use an official Maven image as the base image
-FROM maven:3.9.5-amazoncorretto-21 as build
-# Set the working directory in the container
-WORKDIR /app
-# Copy the pom.xml and the project files to the container
-COPY pom.xml .
-COPY src ./src
-# Build the application using Maven
-RUN mvn clean package -DskipTests
+FROM rust:1.87-alpine3.21 AS builder
+RUN apk add musl-dev openssl-dev openssl-libs-static
+WORKDIR /usr/src/app
+COPY . .
 
-# Use an official OpenJDK image as the base image
-FROM amazoncorretto:21-alpine3.18
-# Set the working directory in the container
+# Set target based on architecture
+ARG TARGETPLATFORM
+RUN case "$TARGETPLATFORM" in \
+    "linux/amd64") TARGET="x86_64-unknown-linux-musl" ;; \
+    "linux/arm64") TARGET="aarch64-unknown-linux-musl" ;; \
+    *) echo "Unsupported platform: $TARGETPLATFORM" && exit 1 ;; \
+    esac && \
+    rustup target add $TARGET && \
+    cargo install --path . --target=$TARGET
+
+FROM alpine:3.21
 WORKDIR /app
-# Copy the built JAR file from the previous stage to the container
-COPY --from=build /app/target/sexo-1.0-SNAPSHOT-jar-with-dependencies.jar .
-# Set the command to run the application
-CMD ["java", "-jar", "sexo-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+COPY --from=builder /usr/local/cargo/bin/sexo /usr/local/bin/sexo
+CMD ["sexo"]
