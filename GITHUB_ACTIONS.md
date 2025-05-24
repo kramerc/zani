@@ -5,7 +5,7 @@ This document describes the GitHub Actions workflows for automated deployment to
 ## Workflows
 
 ### 1. Build and Push Docker Image (`deploy-image.yml`)
-- Triggers on pushes to `main` and `ansible` branches
+- Triggers on pushes to `main` branch
 - Builds the Docker image and pushes to GitHub Container Registry (GHCR)
 - Uses `GITHUB_TOKEN` for authentication to GHCR
 
