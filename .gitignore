@@ -43,6 +43,3 @@ inventory.*.local
 # Host-specific overrides with secrets
 host_vars/*.local.yml
 group_vars/*.local.yml
-
-# Deploy keys
-deploy_key*
