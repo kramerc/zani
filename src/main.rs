@@ -47,6 +47,12 @@ async fn main() -> Result<(), anyhow::Error> {
                     handle_part(hostmask, &mut hostmasks_by_user, &mut channel_modes, channel);
                 }
             }
+            Command::QUIT(..) => {
+                if let Some(ref prefix) = message.prefix {
+                    let hostmask = &prefix.to_string();
+                    handle_quit(hostmask, &mut hostmasks_by_user, &mut channel_modes);
+                }
+            }
             Command::Response(Response::RPL_WHOREPLY, ref args) => {
                 handle_who_reply(args, &mut hostmasks_by_user);
             }
