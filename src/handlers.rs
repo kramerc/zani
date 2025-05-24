@@ -105,6 +105,21 @@ pub fn handle_part(
     }
 }
 
+pub fn handle_quit(
+    hostmask: &str,
+    hostmasks_by_user: &mut HashMap<String, String>,
+    channel_modes: &mut ChannelModes,
+) {
+    let nick = parse_nick(&hostmask);
+    hostmasks_by_user.remove(&nick);
+
+    // Remove user from all mode lists across all channels
+    for channel_state in channel_modes.values_mut() {
+        channel_state.ops.remove(&nick);
+        channel_state.voices.remove(&nick);
+    }
+}
+
 pub fn handle_raw_mode_change(
     channel: &str,
     mode_str: &str,
