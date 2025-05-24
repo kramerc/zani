@@ -15,27 +15,16 @@ RUN case "$TARGETPLATFORM" in \
     rustup target add $TARGET && \
     echo $TARGET > /tmp/target
 
-# Build dependencies first (this layer will be cached if dependencies don't change)
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/usr/local/cargo/git \
-    --mount=type=cache,target=/usr/src/app/target \
-    TARGET=$(cat /tmp/target) && \
-    mkdir -p src && \
-    echo "fn main() {}" > src/main.rs && \
-    cargo build --release --target=$TARGET && \
-    rm src/main.rs
-
-# Copy source code
 COPY src ./src
 
-# Build the actual application
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/local/cargo/git \
     --mount=type=cache,target=/usr/src/app/target \
     TARGET=$(cat /tmp/target) && \
-    cargo install --path . --target=$TARGET
+    cargo build --release --target=$TARGET && \
+    cp target/$TARGET/release/sexo /usr/local/bin/sexo
 
 FROM alpine:3.21
 WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/sexo /usr/local/bin/sexo
+COPY --from=builder /usr/local/bin/sexo /usr/local/bin/sexo
 CMD ["sexo"]
