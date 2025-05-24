@@ -1,11 +1,3 @@
-// IRC Bot Refactoring - Clean Modular Structure
-//
-// This file has been refactored from a monolithic structure into a clean modular design:
-// - Separated concerns into logical modules (models, database, commands, handlers, utils)
-// - Extracted command handling into dedicated functions
-// - Improved code readability and maintainability
-// - Made the codebase easier to extend with new features
-
 use std::collections::HashMap;
 use futures::prelude::*;
 use irc::client::prelude::*;
@@ -38,16 +30,22 @@ async fn main() -> Result<(), anyhow::Error> {
     while let Some(message) = stream.next().await.transpose()? {
         match message.command {
             Command::PRIVMSG(ref target, ref msg) => {
-                let hostmask = &message.prefix.unwrap().to_string();
-                handle_privmsg(&client, &conn, target, msg, hostmask, &hostmasks_by_user).await?;
+                if let Some(ref prefix) = message.prefix {
+                    let hostmask = &prefix.to_string();
+                    handle_privmsg(&client, &conn, target, msg, hostmask, &hostmasks_by_user).await?;
+                }
             }
             Command::JOIN(ref channel, ..) => {
-                let hostmask = &message.prefix.unwrap().to_string();
-                handle_join(&client, &conn, channel, hostmask, &mut hostmasks_by_user, &mut channel_modes).await?;
+                if let Some(ref prefix) = message.prefix {
+                    let hostmask = &prefix.to_string();
+                    handle_join(&client, &conn, channel, hostmask, &mut hostmasks_by_user, &mut channel_modes).await?;
+                }
             }
             Command::PART(ref channel, ..) => {
-                let hostmask = &message.prefix.unwrap().to_string();
-                handle_part(hostmask, &mut hostmasks_by_user, &mut channel_modes, channel);
+                if let Some(ref prefix) = message.prefix {
+                    let hostmask = &prefix.to_string();
+                    handle_part(hostmask, &mut hostmasks_by_user, &mut channel_modes, channel);
+                }
             }
             Command::Response(Response::RPL_WHOREPLY, ref args) => {
                 handle_who_reply(args, &mut hostmasks_by_user);

@@ -30,13 +30,15 @@ pub async fn handle_addop_command(
         return Ok(());
     }
 
-    let hostmask = hostmasks_by_user.get(nick);
-    if hostmask.is_none() {
-        client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
-        return Ok(());
-    }
+    let hostmask = match hostmasks_by_user.get(nick) {
+        Some(hostmask) => hostmask,
+        None => {
+            client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
+            return Ok(());
+        }
+    };
 
-    let mut user = get_user(conn, &hostmask.unwrap())?;
+    let mut user = get_user(conn, hostmask)?;
     user.level = OP;
     user.auto_op = true;
 
@@ -73,13 +75,15 @@ pub async fn handle_addvoice_command(
         return Ok(());
     }
 
-    let hostmask = hostmasks_by_user.get(nick);
-    if hostmask.is_none() {
-        client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
-        return Ok(());
-    }
+    let hostmask = match hostmasks_by_user.get(nick) {
+        Some(hostmask) => hostmask,
+        None => {
+            client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
+            return Ok(());
+        }
+    };
 
-    let mut user = get_user(conn, &hostmask.unwrap())?;
+    let mut user = get_user(conn, hostmask)?;
     user.auto_voice = true;
 
     save_user(conn, &user)?;
@@ -101,13 +105,15 @@ pub async fn handle_who_command(
         return Ok(());
     }
 
-    let hostmask = hostmasks_by_user.get(nick);
-    if hostmask.is_none() {
-        client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
-        return Ok(());
-    }
+    let hostmask = match hostmasks_by_user.get(nick) {
+        Some(hostmask) => hostmask,
+        None => {
+            client.send_privmsg(channel, format!("The bot is missing the hostmask for user {}", nick))?;
+            return Ok(());
+        }
+    };
 
-    let user = get_user(conn, &hostmask.unwrap())?;
+    let user = get_user(conn, hostmask)?;
     if user.id.is_none() {
         client.send_privmsg(channel, format!("{} is not in the database", nick))?;
     } else {
@@ -123,6 +129,6 @@ pub async fn handle_who_command(
         )?;
     }
 
-    client.send_privmsg(channel, format!("Hostmask: {}", hostmask.unwrap()))?;
+    client.send_privmsg(channel, format!("Hostmask: {}", hostmask))?;
     Ok(())
 }

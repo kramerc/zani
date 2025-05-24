@@ -23,6 +23,8 @@ impl User {
 
 pub const USER: i64 = 0;
 pub const OP: i64 = 1;
+#[allow(dead_code)]
+#[deprecated]
 pub const ADMIN: i64 = 3;
 
 pub fn level_str(level: i64) -> String {
