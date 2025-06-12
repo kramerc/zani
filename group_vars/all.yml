@@ -13,8 +13,8 @@ systemd_service: "container-{{ container_name }}"
 
 # IRC Bot configuration
 irc_config:
-  nickname: "{{ app_name }}"
-  alt_nicks: ["{{ app_name }}_", "{{ app_name }}__"]
+  nickname: "Zani"
+  alt_nicks: ["Zani_", "Zani__"]
   username: "{{ app_name }}"
   realname: "{{ app_name }}"
   server: "localhost"

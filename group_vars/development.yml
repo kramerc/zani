@@ -7,7 +7,7 @@ build_strategy: "build"  # Options: "build" or "pull"
 
 # Development IRC configuration overrides
 irc_config_overrides:
-  nickname: "zani-dev"
+  nickname: "Zani|Dev"
   channels: ["#dev", "#testing", "#private-dev"]
   server: "localhost"
   port: 6667
