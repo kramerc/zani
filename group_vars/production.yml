@@ -10,9 +10,7 @@ irc_config_overrides:
   server: "irc.swepipe.se"
   port: 6667
   use_tls: false
-  channels: ["#camp"]
-  channel_keys:
-    "#camp": "truetocaesar"
+  channels: ["#cute"]
 
 # Example: Different container settings for production
 # container_options:

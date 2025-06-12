@@ -2,7 +2,7 @@
 
 # Default target
 help:
-	@echo "Sexo IRC Bot - Available targets:"
+	@echo "zani IRC Bot - Available targets:"
 	@echo ""
 	@echo "Development:"
 	@echo "  build        - Build the project with cargo"
@@ -32,11 +32,11 @@ test:
 
 clean:
 	cargo clean
-	rm -f data/sexo.db
+	rm -f data/zani.db
 
 # Docker targets
 docker-build:
-	docker build -t sexo:latest .
+	docker build -t zani:latest .
 
 docker-run:
 	docker-compose up --build

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Deploy sexo IRC bot using Ansible
+# Deploy zani IRC bot using Ansible
 set -e
 
-echo "=== Deploying sexo IRC bot ==="
+echo "=== Deploying zani IRC bot ==="
 
 # Check if ansible is installed
 if ! command -v ansible-playbook &> /dev/null; then
@@ -38,10 +38,10 @@ ansible-playbook -i inventory.ini $LIMIT deploy.yml "$@"
 echo "=== Deployment complete ==="
 echo ""
 echo "Useful commands:"
-echo "  Check status: systemctl --user status container-sexo"
-echo "  View logs:    journalctl --user -u container-sexo -f"
-echo "  Restart:      systemctl --user restart container-sexo"
-echo "  Stop:         systemctl --user stop container-sexo"
+echo "  Check status: systemctl --user status container-zani"
+echo "  View logs:    journalctl --user -u container-zani -f"
+echo "  Restart:      systemctl --user restart container-zani"
+echo "  Stop:         systemctl --user stop container-zani"
 echo ""
 echo "Environment options:"
 echo "  Development:  ./deploy.sh --dev (uses development group in inventory.ini)"
@@ -55,4 +55,4 @@ echo ""
 echo "Configuration:"
 echo "  Variables:    See group_vars/ and host_vars/ directories"
 echo "  Reference:    See VARIABLES.md for all available options"
-echo "  Bot config:   Generated at /home/sexo/sexo/config/sexo.toml"
+echo "  Bot config:   Generated at /home/zani/zani/config/zani.toml"

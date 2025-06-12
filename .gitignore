@@ -9,9 +9,10 @@ Cargo.lock
 data/*.db
 
 # Configuration files with secrets
-sexo.toml
-config/sexo.toml.local
+zani.toml
+config/zani.toml.local
 config/*.local
+deploy_key*
 
 # Ansible generated files
 *.retry

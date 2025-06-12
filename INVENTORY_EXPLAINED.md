@@ -1,6 +1,6 @@
 # Inventory Structure
 
-The sexo IRC bot deployment uses a single, simple inventory file: `inventory.ini`
+The zani IRC bot deployment uses a single, simple inventory file: `inventory.ini`
 
 ## Structure
 

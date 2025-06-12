@@ -18,11 +18,11 @@ async fn main() -> Result<(), anyhow::Error> {
     let mut hostmasks_by_user: HashMap<String, String> = HashMap::new();
     let mut channel_modes: ChannelModes = HashMap::new();
 
-    let conn = Connection::open("data/sexo.db")?;
+    let conn = Connection::open("data/zani.db")?;
     prepare(&conn)?;
     seed(&conn)?;
 
-    let config = Config::load("config/sexo.toml")?;
+    let config = Config::load("config/zani.toml")?;
     let mut client = Client::from_config(config).await?;
     client.identify()?;
 

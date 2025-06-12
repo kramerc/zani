@@ -15,5 +15,5 @@ RUN case "$TARGETPLATFORM" in \
 
 FROM alpine:3.21
 WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/sexo /usr/local/bin/sexo
-CMD ["sexo"]
+COPY --from=builder /usr/local/cargo/bin/zani /usr/local/bin/zani
+CMD ["zani"]

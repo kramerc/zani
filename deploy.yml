@@ -1,5 +1,5 @@
 ---
-- name: Deploy sexo IRC bot to Podman container
+- name: Deploy zani IRC bot to Podman container
   hosts: all
   become: false
 
@@ -8,7 +8,7 @@
     merged_irc_config: "{{ irc_config | combine(irc_config_overrides | default({}), recursive=True) }}"
 
   tasks:
-    - name: Ensure sexo user exists
+    - name: Ensure zani user exists
       become: true
       user:
         name: "{{ app_user }}"
@@ -45,8 +45,8 @@
       become: true
       become_user: "{{ app_user }}"
       template:
-        src: sexo.toml.j2
-        dest: "{{ config_dir }}/sexo.toml"
+        src: zani.toml.j2
+        dest: "{{ config_dir }}/zani.toml"
         mode: '0644'
 
     - name: Login to container registry (production)
@@ -100,7 +100,7 @@
         state: absent
       ignore_errors: true
 
-    - name: Create sexo container
+    - name: Create zani container
       become: true
       become_user: "{{ app_user }}"
       containers.podman.podman_container:
@@ -116,7 +116,7 @@
         log_options:
           tag: "{{ container_options.log_tag }}"
 
-    - name: Enable lingering for sexo user (allows user services to run without login)
+    - name: Enable lingering for zani user (allows user services to run without login)
       become: true
       command: loginctl enable-linger {{ app_user }}
       changed_when: false
@@ -145,7 +145,7 @@
         scope: user
         daemon_reload: true
 
-    - name: Enable and start sexo container service
+    - name: Enable and start zani container service
       become: true
       become_user: "{{ app_user }}"
       systemd:

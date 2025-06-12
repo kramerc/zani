@@ -35,7 +35,7 @@ The production deployment uses the following configuration:
 - **Target server**: `nexus.mer.st`
 - **Deploy user**: `deploy`
 - **Container registry**: `ghcr.io`
-- **Image**: `ghcr.io/kramerc/sexo:main`
+- **Image**: `ghcr.io/kramerc/zani:main`
 
 ## Manual Deployment
 

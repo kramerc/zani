@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This directory contains Ansible playbooks and scripts to deploy the sexo IRC bot to a Podman container managed by systemd at the user level.
+This directory contains Ansible playbooks and scripts to deploy the zani IRC bot to a Podman container managed by systemd at the user level.
 
 ## Prerequisites
 
@@ -79,26 +79,26 @@ The playbook will automatically login to the registry and pull the pre-built ima
 
 ## What the Playbook Does
 
-1. **User Management**: Creates the `sexo` user if it doesn't exist
-2. **Directory Setup**: Creates necessary directories under `/home/sexo/sexo/`
+1. **User Management**: Creates the `zani` user if it doesn't exist
+2. **Directory Setup**: Creates necessary directories under `/home/zani/zani/`
 3. **Code Deployment**: Copies source code to the target system
 4. **Container Image**: 
    - **Development**: Builds the container image from source using Podman
    - **Production**: Pulls pre-built image from container registry
 5. **Container Creation**: Creates and configures the Podman container
 6. **Systemd Integration**: 
-   - Enables lingering for the sexo user
+   - Enables lingering for the zani user
    - Generates systemd service files
    - Enables and starts the service
 
 ## File Structure After Deployment
 
 ```
-/home/sexo/sexo/
+/home/zani/zani/
 ├── config/
-│   └── sexo.toml          # Bot configuration (auto-generated)
+│   └── zani.toml          # Bot configuration (auto-generated)
 ├── data/
-│   └── sexo.db            # SQLite database file (created by bot)
+│   └── zani.db            # SQLite database file (created by bot)
 ├── src/                   # Source code
 ├── Cargo.toml
 ├── Dockerfile
@@ -111,24 +111,24 @@ After deployment, you can manage the bot using systemctl:
 
 ```bash
 # Check status
-systemctl --user status container-sexo
+systemctl --user status container-zani
 
 # View logs
-journalctl --user -u container-sexo -f
+journalctl --user -u container-zani -f
 
 # Restart the bot
-systemctl --user restart container-sexo
+systemctl --user restart container-zani
 
 # Stop the bot
-systemctl --user stop container-sexo
+systemctl --user stop container-zani
 
 # Start the bot
-systemctl --user start container-sexo
+systemctl --user start container-zani
 ```
 
 ## Configuration
 
-The bot configuration is automatically generated from Ansible variables and stored in `/home/sexo/sexo/config/sexo.toml`.
+The bot configuration is automatically generated from Ansible variables and stored in `/home/zani/zani/config/zani.toml`.
 
 ### Variable Structure
 
@@ -143,7 +143,7 @@ host_vars/
 └── localhost.yml        # Host-specific variables
 
 templates/
-└── sexo.toml.j2         # Configuration template
+└── zani.toml.j2         # Configuration template
 ```
 
 ### Customizing Configuration
@@ -170,7 +170,7 @@ After making changes to variables:
 
 1. Restart the container:
    ```bash
-   systemctl --user restart container-sexo
+   systemctl --user restart container-zani
    ```
 
 ## Troubleshooting
@@ -182,7 +182,7 @@ After making changes to variables:
 
 2. **Check container logs directly**:
    ```bash
-   podman logs sexo
+   podman logs zani
    ```
 
 3. **Rebuild and redeploy**:
@@ -192,7 +192,7 @@ After making changes to variables:
 
 4. **Check systemd service status**:
    ```bash
-   systemctl --user status container-sexo
+   systemctl --user status container-zani
    ```
 
 ## Customization

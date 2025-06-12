@@ -1,13 +1,13 @@
 # Group Variables Reference
 
-This file documents all available variables for the sexo IRC bot deployment.
+This file documents all available variables for the zani IRC bot deployment.
 
 ## Core Application Variables
 
 ```yaml
 # Application identity
-app_name: sexo                    # Name of the application
-app_user: sexo                    # System user to run the application
+app_name: zani                    # Name of the application
+app_user: zani                    # System user to run the application
 app_dir: "/home/{{ app_user }}/{{ app_name }}"  # Application directory
 config_dir: "{{ app_dir }}/config"              # Configuration directory
 data_dir: "{{ app_dir }}/data"                  # Persistent data directory
@@ -22,12 +22,12 @@ systemd_service: "container-{{ container_name }}"   # Systemd service name
 
 ```yaml
 irc_config:
-  nickname: "sexo"              # Primary nickname
+  nickname: "zani"              # Primary nickname
   alt_nicks:                    # Alternative nicknames
-    - "sexo_"
-    - "sexo__"
-  username: "sexo"              # IRC username
-  realname: "sexo"              # IRC real name
+    - "zani_"
+    - "zani__"
+  username: "zani"              # IRC username
+  realname: "zani"              # IRC real name
   server: "localhost"           # IRC server hostname
   port: 6667                    # IRC server port
   password: ""                  # Server password (if required)
@@ -36,8 +36,8 @@ irc_config:
   channels:                    # Channels to join
     - "#thelounge"
   umodes: "+i"                 # User modes to set
-  user_info: "sexo channel management bot"  # User info
-  version: "sexo/0.1.0"        # Version string
+  user_info: "zani channel management bot"  # User info
+  version: "zani/0.1.0"        # Version string
   ping_time: 180               # Ping interval
   ping_timeout: 20             # Ping timeout
   burst_window_length: 8       # Flood protection window
@@ -95,7 +95,7 @@ build_options:
 - **`pull`**: Pulls pre-built container image from a registry
   - Used in production environments
   - Requires `container_image` to point to a registry URL
-  - Example: `ghcr.io/kramerc/sexo:main`
+  - Example: `ghcr.io/kramerc/zani:main`
 
 ### Environment Examples
 
@@ -186,10 +186,10 @@ build_options:
 
 ```yaml
 # host_vars/production.example.com.yml
-app_user: sexo-prod
-app_dir: "/opt/sexo"
+app_user: zani-prod
+app_dir: "/opt/zani"
 
 irc_config:
-  nickname: "sexo-prod"
+  nickname: "zani-prod"
   channels: ["#operations"]
 ```

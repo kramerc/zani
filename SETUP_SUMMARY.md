@@ -24,7 +24,7 @@
 ├── host_vars/
 │   └── localhost.yml             # Localhost-specific overrides
 ├── templates/
-│   └── sexo.toml.j2             # Configuration template
+│   └── zani.toml.j2             # Configuration template
 └── inventory file:
     └── inventory.ini             # Single inventory with development + production groups
 ```
@@ -88,13 +88,13 @@ irc_config:
 ### Management Commands
 ```bash
 # Check status
-systemctl --user status container-sexo
+systemctl --user status container-zani
 
 # View logs
-journalctl --user -u container-sexo -f
+journalctl --user -u container-zani -f
 
 # Restart after config changes
-systemctl --user restart container-sexo
+systemctl --user restart container-zani
 ```
 
 ## 🔧 Development Workflow

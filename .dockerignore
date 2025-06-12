@@ -21,6 +21,6 @@ Dockerfile
 .DS_Store
 Thumbs.db
 
-# Ignore sexo data files
-/sexo.db
-/sexo.toml
+# Ignore zani data files
+/zani.db
+/zani.toml

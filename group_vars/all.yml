@@ -1,7 +1,7 @@
 ---
 # Application configuration
-app_name: sexo
-app_user: sexo
+app_name: zani
+app_user: zani
 app_dir: "/home/{{ app_user }}/{{ app_name }}"
 config_dir: "{{ app_dir }}/config"
 data_dir: "{{ app_dir }}/data"

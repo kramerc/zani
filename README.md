@@ -1,4 +1,4 @@
-# Sexo IRC Bot
+# zani IRC Bot
 
 A modular IRC bot written in Rust that provides user management and channel moderation features.
 
@@ -7,7 +7,7 @@ A modular IRC bot written in Rust that provides user management and channel mode
 ```bash
 # Clone and deploy locally
 git clone <repository>
-cd sexo
+cd zani
 ./deploy.sh --dev
 ```
 
@@ -46,12 +46,12 @@ The codebase has been refactored into a clean modular structure:
 The bot can be configured in two ways:
 
 ### Manual Configuration
-Create a `config/sexo.toml` file:
+Create a `config/zani.toml` file:
 
 ```toml
-nickname = "sexo"
-username = "sexo"
-realname = "Sexo IRC Bot"
+nickname = "zani"
+username = "zani"
+realname = "zani IRC Bot"
 server = "irc.example.org"
 port = 6667
 channels = ["#yourchannel"]
