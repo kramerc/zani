@@ -19,42 +19,7 @@ pub fn seed(conn: &Connection) -> Result<(), anyhow::Error> {
     let users = vec![
         User {
             id: None,
-            hostmask: "whale@46.23.92.36".to_string(),
-            level: OP,
-            auto_op: true,
-            auto_voice: false,
-        },
-        User {
-            id: None,
-            hostmask: "horse@46.23.95.46".to_string(),
-            level: OP,
-            auto_op: true,
-            auto_voice: false,
-        },
-        User {
-            id: None,
-            hostmask: "no@static.226.87.78.5.clients.your-server.de".to_string(),
-            level: OP,
-            auto_op: true,
-            auto_voice: false,
-        },
-        User {
-            id: None,
             hostmask: "kr@m3r.sh".to_string(),
-            level: OP,
-            auto_op: true,
-            auto_voice: false,
-        },
-        User {
-            id: None,
-            hostmask: "dolphin@nexus.mer.st".to_string(),
-            level: USER,
-            auto_op: false,
-            auto_voice: true,
-        },
-        User {
-            id: None,
-            hostmask: "thelounge@baker.kekra.net".to_string(),
             level: OP,
             auto_op: true,
             auto_voice: false,
