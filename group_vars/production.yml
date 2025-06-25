@@ -10,7 +10,7 @@ irc_config_overrides:
   server: "irc.swepipe.se"
   port: 6667
   use_tls: false
-  channels: ["#cute"]
+  channels: ["#cute", "#equilibrated"]
 
 # Example: Different container settings for production
 # container_options:
